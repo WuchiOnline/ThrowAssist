@@ -62,7 +62,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     {
         if (m_ThrowOnDetach)
         {
-
+            // RESUME HERE:
             // 4-28-20 You need to figure out how to abstract this logic so that it works from any position/rotation in the scene,
             // not just predetermined transforms with preset rotations towards the target object.
             // DetermineCurrentPlayerPositionAnchor();
@@ -75,7 +75,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
             else
             {
-                // m_RigidBody.velocity = DetermineAssistedThrowVelocity();
+                // m_RigidBody.velocity = DetermineAssistedThrowVelocity(); // NEXT UP
                 m_RigidBody.velocity = m_DetachVelocity; // temporary until you finish refactoring DetermineAssistedThrowVelocity();
                 m_RigidBody.angularVelocity = m_DetachAngularVelocity;
             }
