@@ -94,12 +94,12 @@ namespace UnityEngine.XR.Interaction.Toolkit
         AnimationCurve m_ThrowSmoothingCurve = AnimationCurve.Linear(1f, 1f, 1f, 0f);
 
         [SerializeField]
-        float m_ThrowVelocityScale = k_DefaultThrowVelocityScale;
+        protected internal float m_ThrowVelocityScale = k_DefaultThrowVelocityScale;
         /// <summary>Gets or set the the velocity scale used when throwing.</summary>
         public float throwVelocityScale { get { return m_ThrowVelocityScale; } set { m_ThrowVelocityScale = value; } }
 
         [SerializeField]
-        float m_ThrowAngularVelocityScale = k_DefaultThrowAngularVelocityScale;
+        protected internal float m_ThrowAngularVelocityScale = k_DefaultThrowAngularVelocityScale;
         /// <summary>Gets or set the the angular velocity scale used when throwing.</summary>
         public float throwAngularVelocityScale { get { return m_ThrowAngularVelocityScale; } set { m_ThrowAngularVelocityScale = value; } }
 
@@ -140,8 +140,8 @@ namespace UnityEngine.XR.Interaction.Toolkit
 
         int m_ThrowSmoothingCurrentFrame;
         float[] m_ThrowSmoothingFrameTimes = new float[k_ThrowSmoothingFrameCount];
-        Vector3[] m_ThrowSmoothingVelocityFrames = new Vector3[k_ThrowSmoothingFrameCount];
-        Vector3[] m_ThrowSmoothingAngularVelocityFrames = new Vector3[k_ThrowSmoothingFrameCount];
+        protected internal Vector3[] m_ThrowSmoothingVelocityFrames = new Vector3[k_ThrowSmoothingFrameCount];
+        protected internal Vector3[] m_ThrowSmoothingAngularVelocityFrames = new Vector3[k_ThrowSmoothingFrameCount];
 
         protected internal Rigidbody m_RigidBody;
         Vector3 m_LastPosition;
@@ -504,7 +504,7 @@ namespace UnityEngine.XR.Interaction.Toolkit
             m_LastRotation = m_SelectingInteractor.attachTransform.rotation;
         }
 
-        Vector3 getSmoothedVelocityValue(Vector3[] velocityFrames)
+        protected internal Vector3 getSmoothedVelocityValue(Vector3[] velocityFrames)
         {
             Vector3 calcVelocity = new Vector3();
             int frameCounter = 0;

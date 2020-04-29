@@ -795,6 +795,8 @@ MonoBehaviour:
   m_ThrowAngularVelocityScale: 0.25
   m_GravityOnDetach: 0
   m_RetainTransformParent: 1
+  pollsToProcess: 4
+  ThrowStrengthAssistThreshold: 0.45
 --- !u!54 &1180039968
 Rigidbody:
   m_ObjectHideFlags: 0
