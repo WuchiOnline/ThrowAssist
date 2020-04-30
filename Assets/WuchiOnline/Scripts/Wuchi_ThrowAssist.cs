@@ -60,6 +60,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
     private void Update()
     {
+
         if (isInteractorVelocityPollingActive)
         {
             Vector3 smoothedVelocity = getSmoothedVelocityValue(m_ThrowSmoothingVelocityFrames);
@@ -106,37 +107,37 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     }
 
 
-    //private Vector3 DetermineAssistedThrowVelocity()
-    //{
-    //    baseThrowVelocity = DetermineHighestUpwardVelocityFromPolledList();
+    private Vector3 DetermineAssistedThrowVelocity()
+    {
+        baseThrowVelocity = DetermineHighestUpwardVelocityFromPolledList();
 
-    //    float assistedUpwardVelocity = AssistBaseUpwardVelocity();
-    //    float assistedForwardVelocity = AssistBaseForwardVelocity();
-    //    float adjustedHorizontalVelocity = AdjustBaseHorizontalVelocity(assistedForwardVelocity);
+        float assistedUpwardVelocity = AssistBaseUpwardVelocity();
+        float assistedForwardVelocity = AssistBaseForwardVelocity();
+        float adjustedHorizontalVelocity = AdjustBaseHorizontalVelocity(assistedForwardVelocity);
 
-    //    Vector3 newAssistedThrowVelocity = new Vector3(adjustedHorizontalVelocity, assistedUpwardVelocity, assistedForwardVelocity);
+        Vector3 newAssistedThrowVelocity = new Vector3(adjustedHorizontalVelocity, assistedUpwardVelocity, assistedForwardVelocity);
 
-    //    UpdateRigToTargetRotation();
+        UpdateRigToTargetRotation();
 
-    //    Vector3 transformedAssistedThrowVelocity = rigToTarget.InverseTransformVector(newAssistedThrowVelocity);
+        Vector3 transformedAssistedThrowVelocity = rigToTarget.InverseTransformVector(newAssistedThrowVelocity);
 
-    //    float releaseHeightThrowModifier;
+        float releaseHeightThrowModifier;
 
-    //    if (controllerPositionAtRelease.y > AverageReleaseHeight) // Above-Average Release Height 
-    //    {
-    //        releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - controllerPositionAtRelease.y) * 0.05f); // This function was determined through extensive playtesting for best feel 
-    //    }
-    //    else // Below-Average Release Height
-    //    {
-    //        releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - controllerPositionAtRelease.y) * 0.06f); // This function was determined through extensive playtesting for best feel
-    //    }
+        if (selectingInteractor.attachTransform.position.y > AverageReleaseHeight) // Above-Average Release Height 
+        {
+            releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - selectingInteractor.attachTransform.position.y) * 0.05f); // This function was determined through extensive playtesting for best feel 
+        }
+        else // Below-Average Release Height
+        {
+            releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - selectingInteractor.attachTransform.position.y) * 0.06f); // This function was determined through extensive playtesting for best feel
+        }
 
-    //    Vector3 finalAssistedThrowVelocity = transformedAssistedThrowVelocity * releaseHeightThrowModifier;
+        Vector3 finalAssistedThrowVelocity = transformedAssistedThrowVelocity * releaseHeightThrowModifier;
 
-    //    pollingList.Clear();
+        polledVelocities.Clear();
 
-    //    return finalAssistedThrowVelocity;
-    //}
+        return finalAssistedThrowVelocity;
+    }
 
     private Vector3 DetermineHighestUpwardVelocityFromPolledList()
     {
