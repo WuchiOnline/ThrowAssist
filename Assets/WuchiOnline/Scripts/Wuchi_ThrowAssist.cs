@@ -7,6 +7,12 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class Wuchi_ThrowAssist : XRGrabInteractable
 {
 
+    // Backlog 4-30-20:
+    // 1. Need to refactor code so that localizedVelocity is accounted for, instead of everything using base velocity.
+    // 2. Need to set threshold so that ball does not spike to the side on certain throws.
+    // 3. Do an overall clean up refactor
+    // 4. Clarify that constants can be set to public fields to abstract for any application.
+
     // Magic Numbers: all constants were determined by extensive playtesting for best feel.
     private const float HorizontalAssistThreshold = 0.75f;
     private const float MinUpwardThrowModifier = 15.0f;
