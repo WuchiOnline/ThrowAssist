@@ -19,6 +19,9 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     private const float AverageReleaseHeight = 2.5f;
     private const float ThrowStrengthAssistThreshold = 0.45f;
 
+
+    public Transform rigToTarget;
+
     public Transform target;
 
     public float unassistedThrowVelocityModifier;
@@ -32,6 +35,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     public void Start()
     {
         polledVelocities = new Queue<Vector3>();
+        rigToTarget = GameObject.FindWithTag("RigToTarget").transform;
     }
 
     protected override void OnSelectEnter(XRBaseInteractor interactor)
@@ -101,53 +105,6 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
         Debug.Log("Detached.");
     }
 
-    private void DetermineCurrentPlayerPositionAnchor()
-    {
-        // This logic needs to be abstracted.
-        // This may be that you create a new currentPlayerTransform that has everything at 0 except for the rotation of the headset.
-        // logic abstraction attempt 1:
-
-        //Vector3 direction = (target.position - transform.position).normalized;
-
-        //// create the rotation we need to be in to look at the target
-        //Quaternion lookAtRotation = Quaternion.LookRotation(direction);
-
-        //Quaternion lookAtRotation_onlyY = Quaternion.Euler(transform.rotation.eulerAngles.x, lookAtRotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
-        //transform.rotation = lookAtRotation_onlyY;
-
-
-        //switch (playerPositionTrackerScript.currentPlayerPosition)
-        //{
-        //    case 1:
-        //        currentPlayerTransform = playerPositionA;
-        //        break;
-        //    case 2:
-        //        currentPlayerTransform = playerPositionB;
-        //        break;
-        //    case 3:
-        //        currentPlayerTransform = playerPositionC;
-        //        break;
-        //    case 4:
-        //        currentPlayerTransform = playerPositionD;
-        //        break;
-        //    case 5:
-        //        currentPlayerTransform = playerPositionE;
-        //        break;
-        //}
-    }
-
-    //public void ConstructPlayerToTargetTransformAnchor()
-    //{
-    //    Vector3 direction = (target.position - transform.position).normalized;
-
-    //    //create the rotation we need to be in to look at the target
-    //    Quaternion lookAtRotation = Quaternion.LookRotation(direction);
-
-    //    Quaternion lookAtRotation_onlyY = Quaternion.Euler(transform.rotation.eulerAngles.x, lookAtRotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-
-    //    transform.rotation = lookAtRotation_onlyY;
-    //}
 
     //private Vector3 DetermineAssistedThrowVelocity()
     //{
@@ -159,10 +116,9 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
     //    Vector3 newAssistedThrowVelocity = new Vector3(adjustedHorizontalVelocity, assistedUpwardVelocity, assistedForwardVelocity);
 
-    //    // resume here. 4-30-20 12:48 PM
-    //    // transform world space velocity so that it is localized to a transform that is rotated (looking at) target object.
+    //    UpdateRigToTargetRotation();
 
-    //    Vector3 transformedAssistedThrowVelocity = currentPlayerTransform.InverseTransformVector(newAssistedThrowVelocity);
+    //    Vector3 transformedAssistedThrowVelocity = rigToTarget.InverseTransformVector(newAssistedThrowVelocity);
 
     //    float releaseHeightThrowModifier;
 
@@ -257,5 +213,17 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
             return baseThrowVelocity.x;
         }
 
+    }
+
+    void UpdateRigToTargetRotation()
+    {
+        Vector3 direction = (target.position - rigToTarget.position).normalized;
+
+        // create the rotation we need to be in to look at the target
+        Quaternion lookAtRotation = Quaternion.LookRotation(direction);
+
+        Quaternion lookAtRotation_onlyY = Quaternion.Euler(rigToTarget.rotation.eulerAngles.x, lookAtRotation.eulerAngles.y, rigToTarget.rotation.eulerAngles.z);
+
+        rigToTarget.rotation = lookAtRotation_onlyY;
     }
 }
