@@ -84,8 +84,9 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     {
         if (m_ThrowOnDetach)
         {
+            UpdateRigToTargetRotation();
 
-            if (m_DetachVelocity.y < ThrowStrengthAssistThreshold || m_DetachVelocity.z < ThrowStrengthAssistThreshold || polledVelocities.Count < 1) // Does not meet the minimum throw strength to trigger assisted throw.
+            if (m_DetachVelocity.y < ThrowStrengthAssistThreshold || rigToTarget.InverseTransformVector(m_DetachVelocity).z < ThrowStrengthAssistThreshold || polledVelocities.Count < 1) // Does not meet the minimum throw strength to trigger assisted throw.
             {
                 m_RigidBody.velocity = m_DetachVelocity;
                 m_RigidBody.angularVelocity = m_DetachAngularVelocity;
@@ -108,15 +109,17 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     {
         baseThrowVelocity = DetermineHighestUpwardVelocityFromPolledList();
 
+        // we need to convert the velocity from world space to local before adjusting.
+        baseThrowVelocity = rigToTarget.InverseTransformVector(baseThrowVelocity);
+
         float assistedUpwardVelocity = AssistBaseUpwardVelocity();
         float assistedForwardVelocity = AssistBaseForwardVelocity();
         float adjustedHorizontalVelocity = AdjustBaseHorizontalVelocity(assistedForwardVelocity);
 
         Vector3 newAssistedThrowVelocity = new Vector3(adjustedHorizontalVelocity, assistedUpwardVelocity, assistedForwardVelocity);
 
-        UpdateRigToTargetRotation();
-
-        Vector3 transformedAssistedThrowVelocity = rigToTarget.InverseTransformVector(newAssistedThrowVelocity);
+        // convert back to world space.
+        Vector3 transformedAssistedThrowVelocity = rigToTarget.TransformVector(newAssistedThrowVelocity);
 
         float releaseHeightThrowModifier;
 
@@ -133,8 +136,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
         polledVelocities.Clear();
 
-        return rigToTarget.TransformVector(finalAssistedThrowVelocity);
-        // return finalAssistedThrowVelocity;
+        return finalAssistedThrowVelocity;
     }
 
     private Vector3 DetermineHighestUpwardVelocityFromPolledList()
