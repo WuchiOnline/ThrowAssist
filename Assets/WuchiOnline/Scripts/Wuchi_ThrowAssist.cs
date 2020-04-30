@@ -25,7 +25,6 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     private const float AverageReleaseHeight = 2.5f;
     private const float ThrowStrengthAssistThreshold = 0.45f;
 
-
     public Transform rigToTarget;
     public Transform target;
 
@@ -108,6 +107,18 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
         }
 
         Debug.Log("Detached.");
+    }
+
+    void UpdateRigToTargetRotation()
+    {
+        Vector3 direction = (target.position - rigToTarget.position).normalized;
+
+        // create the rotation we need to be in to look at the target
+        Quaternion lookAtRotation = Quaternion.LookRotation(direction);
+
+        Quaternion lookAtRotation_onlyY = Quaternion.Euler(rigToTarget.rotation.eulerAngles.x, lookAtRotation.eulerAngles.y, rigToTarget.rotation.eulerAngles.z);
+
+        rigToTarget.rotation = lookAtRotation_onlyY;
     }
 
 
@@ -222,15 +233,5 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
     }
 
-    void UpdateRigToTargetRotation()
-    {
-        Vector3 direction = (target.position - rigToTarget.position).normalized;
 
-        // create the rotation we need to be in to look at the target
-        Quaternion lookAtRotation = Quaternion.LookRotation(direction);
-
-        Quaternion lookAtRotation_onlyY = Quaternion.Euler(rigToTarget.rotation.eulerAngles.x, lookAtRotation.eulerAngles.y, rigToTarget.rotation.eulerAngles.z);
-
-        rigToTarget.rotation = lookAtRotation_onlyY;
-    }
 }
