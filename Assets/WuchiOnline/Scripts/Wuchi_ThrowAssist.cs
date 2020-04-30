@@ -21,8 +21,9 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
 
     public Transform rigToTarget;
-
     public Transform target;
+
+    Transform currentInteractorAttach;
 
     public float unassistedThrowVelocityModifier;
 
@@ -51,6 +52,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
     protected override void OnSelectExit(XRBaseInteractor interactor)
     {
+        currentInteractorAttach = interactor.attachTransform;
         base.OnSelectExit(interactor);
 
         isInteractorVelocityPollingActive = false;
@@ -82,11 +84,6 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     {
         if (m_ThrowOnDetach)
         {
-            // RESUME HERE:
-            // 4-28-20 You need to figure out how to abstract this logic so that it works from any position/rotation in the scene,
-            // not just predetermined transforms with preset rotations towards the target object.
-
-            // DetermineCurrentPlayerPositionAnchor();
 
             if (m_DetachVelocity.y < ThrowStrengthAssistThreshold || m_DetachVelocity.z < ThrowStrengthAssistThreshold || polledVelocities.Count < 1) // Does not meet the minimum throw strength to trigger assisted throw.
             {
@@ -96,8 +93,8 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
             else
             {
-                // m_RigidBody.velocity = DetermineAssistedThrowVelocity(); // NEXT UP
-                m_RigidBody.velocity = m_DetachVelocity; // temporary until you finish refactoring DetermineAssistedThrowVelocity();
+                m_RigidBody.velocity = DetermineAssistedThrowVelocity();
+                // m_RigidBody.velocity = m_DetachVelocity; // temporary until you finish refactoring DetermineAssistedThrowVelocity();
                 m_RigidBody.angularVelocity = m_DetachAngularVelocity;
             }
 
@@ -123,20 +120,21 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
         float releaseHeightThrowModifier;
 
-        if (selectingInteractor.attachTransform.position.y > AverageReleaseHeight) // Above-Average Release Height 
+        if (currentInteractorAttach.position.y > AverageReleaseHeight) // Above-Average Release Height 
         {
-            releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - selectingInteractor.attachTransform.position.y) * 0.05f); // This function was determined through extensive playtesting for best feel 
+            releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - currentInteractorAttach.position.y) * 0.05f); // This function was determined through extensive playtesting for best feel 
         }
         else // Below-Average Release Height
         {
-            releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - selectingInteractor.attachTransform.position.y) * 0.06f); // This function was determined through extensive playtesting for best feel
+            releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - currentInteractorAttach.position.y) * 0.06f); // This function was determined through extensive playtesting for best feel
         }
 
         Vector3 finalAssistedThrowVelocity = transformedAssistedThrowVelocity * releaseHeightThrowModifier;
 
         polledVelocities.Clear();
 
-        return finalAssistedThrowVelocity;
+        return rigToTarget.TransformVector(finalAssistedThrowVelocity);
+        // return finalAssistedThrowVelocity;
     }
 
     private Vector3 DetermineHighestUpwardVelocityFromPolledList()
