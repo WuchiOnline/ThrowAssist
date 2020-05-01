@@ -10,6 +10,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     // Backlog 5-01-20:
     // 1. Do an overall clean up refactor
     // 2. Improve comments
+    // 3. Put together Github readme.
 
     // Magic Numbers: all constants were determined by extensive playtesting for best feel.
     // These can be adjusted and abstracted for different types of archs and target distances.
