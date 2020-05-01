@@ -9,12 +9,9 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
     // Backlog 5-01-20:
     // 1. Do an overall clean up refactor
-    // 2. Clarify that constants can be set to public fields to abstract for any application.
+    // 2. Improve comments
 
     // Magic Numbers: all constants were determined by extensive playtesting for best feel.
-    // 
-    const float NormalizedHorizontalAccuracyTolerance = 0.2f;
-    const float HorizontalAssistThreshold = 0.75f;
     const float MinUpwardThrowModifier = 15.0f;
     const float MaxUpwardThrowModifier = 1.54f;
     const float MinForwardThrowModifier = 13.0f;
@@ -24,6 +21,8 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     const int OptimalPolledVelocityCount = 3; // Three is the sweet spot, although four and five produce decent results as well.
     const float AverageReleaseHeight = 2.5f;
     const float ThrowStrengthAssistThreshold = 0.45f;
+    const float HorizontalAssistThreshold = 0.75f;
+    const float NormalizedHorizontalAccuracyTolerance = 0.2f;
 
     public Transform rigToTarget;
     public Transform target;
