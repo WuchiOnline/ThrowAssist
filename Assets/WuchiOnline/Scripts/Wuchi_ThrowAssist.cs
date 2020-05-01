@@ -12,6 +12,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     // 2. Improve comments
 
     // Magic Numbers: all constants were determined by extensive playtesting for best feel.
+    // These can be adjusted and abstracted for different types of archs and target distances.
     const float MinUpwardThrowModifier = 15.0f;
     const float MaxUpwardThrowModifier = 1.54f;
     const float MinForwardThrowModifier = 13.0f;
@@ -24,7 +25,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     const float HorizontalAssistThreshold = 0.75f;
     const float NormalizedHorizontalAccuracyTolerance = 0.2f;
 
-    public Transform rigToTarget;
+    public Transform rigToTarget; // a transform of a gameobject childed to the rig to provide a reference point to localize velocities.
     public Transform target;
 
     Transform currentInteractorAttach;
@@ -33,11 +34,9 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
     bool isInteractorVelocityPollingActive;
 
-    public Queue<Vector3> polledVelocities;
+    Queue<Vector3> polledVelocities;
 
-    Vector3 baseThrowVelocity;
-
-    public void Start()
+    void Start()
     {
         polledVelocities = new Queue<Vector3>();
         rigToTarget = GameObject.FindWithTag("RigToTarget").transform;
@@ -79,7 +78,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
             polledVelocities.Enqueue(velocityToPoll);
 
-            Debug.Log("Velocity has been added to polledVelocities: " + velocityToPoll);
+            // Debug.Log("Velocity has been added to polledVelocities: " + velocityToPoll);
         }
 
     }
@@ -90,6 +89,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
         {
             UpdateRigToTargetRotation();
 
+            // Evaluate if throw is strong and accurate enough to warrant applying the throw assist algorithm.
             if (m_DetachVelocity.y < ThrowStrengthAssistThreshold || // Throw does not meet the minimum vertical throw strength to trigger assisted throw.
                 rigToTarget.InverseTransformVector(m_DetachVelocity).z < ThrowStrengthAssistThreshold || // Throw does not meet the minimum forward throw strength to trigger assisted throw. 
                 Mathf.Abs(rigToTarget.InverseTransformVector(m_DetachVelocity).normalized.x) > NormalizedHorizontalAccuracyTolerance || // Throw is not within horizontal accuracy tolerance to warrant assisting velocity.
@@ -122,10 +122,9 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
         rigToTarget.rotation = lookAtRotation_onlyY;
     }
 
-
     Vector3 DetermineAssistedThrowVelocity()
     {
-        baseThrowVelocity = DetermineHighestUpwardVelocityFromPolledList();
+        Vector3 baseThrowVelocity = DetermineHighestUpwardVelocityFromPolledList();
 
         // we need to convert the velocity from world space to local before adjusting.
         Vector3 localizedThrowVelocity = rigToTarget.InverseTransformVector(baseThrowVelocity);
@@ -238,6 +237,5 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
         }
 
     }
-
 
 }
