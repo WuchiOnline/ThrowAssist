@@ -13,6 +13,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
     // Magic Numbers: all constants were determined by extensive playtesting for best feel.
     // These can be adjusted and abstracted for different types of archs and target distances.
+
     const float MinUpwardThrowModifier = 15.0f;
     const float MaxUpwardThrowModifier = 1.54f;
     const float MinForwardThrowModifier = 13.0f;
@@ -28,12 +29,16 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     public Transform rigToTarget; // a transform of a gameobject childed to the rig to provide a reference point to localize velocities.
     public Transform target;
 
+    //
     Transform currentInteractorAttach;
 
+    //
     public float unassistedThrowVelocityModifier;
 
+    //
     bool isInteractorVelocityPollingActive;
 
+    //
     Queue<Vector3> polledVelocities;
 
     void Start()
