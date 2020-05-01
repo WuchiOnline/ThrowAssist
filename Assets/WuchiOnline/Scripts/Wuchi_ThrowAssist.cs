@@ -8,11 +8,11 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 {
 
     // Backlog 5-01-20:
-    // 1. Need to set threshold so that ball does not spike to the side on certain throws.
-    // 2. Do an overall clean up refactor
-    // 3. Clarify that constants can be set to public fields to abstract for any application.
+    // 1. Do an overall clean up refactor
+    // 2. Clarify that constants can be set to public fields to abstract for any application.
 
     // Magic Numbers: all constants were determined by extensive playtesting for best feel.
+    // 
     const float NormalizedHorizontalAccuracyTolerance = 0.2f;
     const float HorizontalAssistThreshold = 0.75f;
     const float MinUpwardThrowModifier = 15.0f;
