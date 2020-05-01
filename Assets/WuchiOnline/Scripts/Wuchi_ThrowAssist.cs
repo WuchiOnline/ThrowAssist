@@ -7,23 +7,23 @@ using UnityEngine.XR.Interaction.Toolkit;
 public class Wuchi_ThrowAssist : XRGrabInteractable
 {
 
-    // Backlog 4-30-20:
-    // 1. Need to refactor code so that localizedVelocity is accounted for, instead of everything using base velocity.
-    // 2. Need to set threshold so that ball does not spike to the side on certain throws.
-    // 3. Do an overall clean up refactor
-    // 4. Clarify that constants can be set to public fields to abstract for any application.
+    // Backlog 5-01-20:
+    // 1. Need to set threshold so that ball does not spike to the side on certain throws.
+    // 2. Do an overall clean up refactor
+    // 3. Clarify that constants can be set to public fields to abstract for any application.
 
     // Magic Numbers: all constants were determined by extensive playtesting for best feel.
-    private const float HorizontalAssistThreshold = 0.75f;
-    private const float MinUpwardThrowModifier = 15.0f;
-    private const float MaxUpwardThrowModifier = 1.54f;
-    private const float MinForwardThrowModifier = 13.0f;
-    private const float MaxForwardThrowModifier = 1.36f;
-    private const float MinBaseAssistRange = 0.5f;
-    private const float MaxBaseAssistRange = 5.5f;
-    private const int OptimalPolledVelocityCount = 3; // Three is the sweet spot, although four and five produce decent results as well.
-    private const float AverageReleaseHeight = 2.5f;
-    private const float ThrowStrengthAssistThreshold = 0.45f;
+    const float NormalizedHorizontalAccuracyTolerance = 0.2f;
+    const float HorizontalAssistThreshold = 0.75f;
+    const float MinUpwardThrowModifier = 15.0f;
+    const float MaxUpwardThrowModifier = 1.54f;
+    const float MinForwardThrowModifier = 13.0f;
+    const float MaxForwardThrowModifier = 1.36f;
+    const float MinBaseAssistRange = 0.5f;
+    const float MaxBaseAssistRange = 5.5f;
+    const int OptimalPolledVelocityCount = 3; // Three is the sweet spot, although four and five produce decent results as well.
+    const float AverageReleaseHeight = 2.5f;
+    const float ThrowStrengthAssistThreshold = 0.45f;
 
     public Transform rigToTarget;
     public Transform target;
@@ -36,7 +36,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
     public Queue<Vector3> polledVelocities;
 
-    private Vector3 baseThrowVelocity;
+    Vector3 baseThrowVelocity;
 
     public void Start()
     {
@@ -65,7 +65,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
     }
 
-    private void Update()
+    void Update()
     {
 
         if (isInteractorVelocityPollingActive)
@@ -91,7 +91,10 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
         {
             UpdateRigToTargetRotation();
 
-            if (m_DetachVelocity.y < ThrowStrengthAssistThreshold || rigToTarget.InverseTransformVector(m_DetachVelocity).z < ThrowStrengthAssistThreshold || polledVelocities.Count < 1) // Does not meet the minimum throw strength to trigger assisted throw.
+            if (m_DetachVelocity.y < ThrowStrengthAssistThreshold || // Throw does not meet the minimum vertical throw strength to trigger assisted throw.
+                rigToTarget.InverseTransformVector(m_DetachVelocity).z < ThrowStrengthAssistThreshold || // Throw does not meet the minimum forward throw strength to trigger assisted throw. 
+                Mathf.Abs(rigToTarget.InverseTransformVector(m_DetachVelocity).normalized.x) > NormalizedHorizontalAccuracyTolerance || // Throw is not within horizontal accuracy tolerance to warrant assisting velocity.
+                polledVelocities.Count < 1) // Object's velocity was not polled for at least a single frame.
             {
                 m_RigidBody.velocity = m_DetachVelocity;
                 m_RigidBody.angularVelocity = m_DetachAngularVelocity;
@@ -100,7 +103,6 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
             else
             {
                 m_RigidBody.velocity = DetermineAssistedThrowVelocity();
-                // m_RigidBody.velocity = m_DetachVelocity; // temporary until you finish refactoring DetermineAssistedThrowVelocity();
                 m_RigidBody.angularVelocity = m_DetachAngularVelocity;
             }
 
@@ -122,22 +124,31 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     }
 
 
-    private Vector3 DetermineAssistedThrowVelocity()
+    Vector3 DetermineAssistedThrowVelocity()
     {
         baseThrowVelocity = DetermineHighestUpwardVelocityFromPolledList();
 
         // we need to convert the velocity from world space to local before adjusting.
-        baseThrowVelocity = rigToTarget.InverseTransformVector(baseThrowVelocity);
+        Vector3 localizedThrowVelocity = rigToTarget.InverseTransformVector(baseThrowVelocity);
 
-        float assistedUpwardVelocity = AssistBaseUpwardVelocity();
-        float assistedForwardVelocity = AssistBaseForwardVelocity();
-        float adjustedHorizontalVelocity = AdjustBaseHorizontalVelocity(assistedForwardVelocity);
+        float assistedUpwardVelocity = AssistLocalUpwardVelocity(localizedThrowVelocity);
+        float assistedForwardVelocity = AssistLocalForwardVelocity(localizedThrowVelocity);
+        float adjustedHorizontalVelocity = AdjustLocalHorizontalVelocity(localizedThrowVelocity, assistedForwardVelocity);
 
-        Vector3 newAssistedThrowVelocity = new Vector3(adjustedHorizontalVelocity, assistedUpwardVelocity, assistedForwardVelocity);
+        Vector3 localAssistedThrowVelocity = new Vector3(adjustedHorizontalVelocity, assistedUpwardVelocity, assistedForwardVelocity);
 
         // convert back to world space.
-        Vector3 transformedAssistedThrowVelocity = rigToTarget.TransformVector(newAssistedThrowVelocity);
+        Vector3 worldAssistedThrowVelocity = rigToTarget.TransformVector(localAssistedThrowVelocity);
 
+        Vector3 finalAssistedThrowVelocity = ApplyReleaseHeightModifier(worldAssistedThrowVelocity);
+
+        polledVelocities.Clear();
+
+        return finalAssistedThrowVelocity;
+    }
+
+    Vector3 ApplyReleaseHeightModifier(Vector3 assistedVelocity)
+    {
         float releaseHeightThrowModifier;
 
         if (currentInteractorAttach.position.y > AverageReleaseHeight) // Above-Average Release Height 
@@ -149,14 +160,10 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
             releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - currentInteractorAttach.position.y) * 0.06f); // This function was determined through extensive playtesting for best feel
         }
 
-        Vector3 finalAssistedThrowVelocity = transformedAssistedThrowVelocity * releaseHeightThrowModifier;
-
-        polledVelocities.Clear();
-
-        return finalAssistedThrowVelocity;
+        return assistedVelocity * releaseHeightThrowModifier;
     }
 
-    private Vector3 DetermineHighestUpwardVelocityFromPolledList()
+    Vector3 DetermineHighestUpwardVelocityFromPolledList()
     {
 
         Vector3 highestUpwardVelocity = polledVelocities.OrderBy(velocity => velocity.y).Last();
@@ -167,68 +174,68 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
     }
 
-    private float AssistBaseUpwardVelocity()
+    float AssistLocalUpwardVelocity(Vector3 localVelocity)
     {
-        if (baseThrowVelocity.y <= 0f)
+        if (localVelocity.y <= 0f)
         {
-            return baseThrowVelocity.y * unassistedThrowVelocityModifier;
+            return localVelocity.y * unassistedThrowVelocityModifier;
         }
-        else if (baseThrowVelocity.y < MinBaseAssistRange)
+        else if (localVelocity.y < MinBaseAssistRange)
         {
-            return baseThrowVelocity.y * MinUpwardThrowModifier; // This constant was determined through extensive playtesting for best feel
+            return localVelocity.y * MinUpwardThrowModifier;
         }
-        else if (baseThrowVelocity.y < MaxBaseAssistRange)
+        else if (localVelocity.y < MaxBaseAssistRange)
         {
-            return AssistedBaseUpwardMagnitude();
+            return AssistedLocalUpwardMagnitude(localVelocity);
         }
         else
         {
-            return baseThrowVelocity.y * MaxUpwardThrowModifier; // This constant was determined through extensive playtesting for best feel
+            return localVelocity.y * MaxUpwardThrowModifier;
         }
     }
 
-    private float AssistedBaseUpwardMagnitude()
+    float AssistedLocalUpwardMagnitude(Vector3 localVelocity)
     {
         // This function was determined through extensive playtesting for best feel, please see: https://www.desmos.com/calculator/clrzceq5ch
-        return (baseThrowVelocity.y / 6.0f) + 7.5f;
+        return (localVelocity.y / 6.0f) + 7.5f;
     }
 
-    private float AssistBaseForwardVelocity()
+    float AssistLocalForwardVelocity(Vector3 localVelocity)
     {
-        if (baseThrowVelocity.z <= 0f)
+        if (localVelocity.z <= 0f)
         {
-            return baseThrowVelocity.z * unassistedThrowVelocityModifier;
+            return localVelocity.z * unassistedThrowVelocityModifier;
         }
-        else if (baseThrowVelocity.z < MinBaseAssistRange) // This constant was determined through extensive playtesting for best feel
+        else if (localVelocity.z < MinBaseAssistRange)
         {
-            return baseThrowVelocity.z * MinForwardThrowModifier;
+            return localVelocity.z * MinForwardThrowModifier;
         }
-        else if (baseThrowVelocity.z < MaxBaseAssistRange)
+        else if (localVelocity.z < MaxBaseAssistRange)
         {
-            return AssistedBaseForwardMagnitude();
+            return AssistedLocalForwardMagnitude(localVelocity);
         }
         else
         {
-            return baseThrowVelocity.z * MaxForwardThrowModifier; // This constant was determined through extensive playtesting for best feel
+            return localVelocity.z * MaxForwardThrowModifier;
         }
     }
 
-    private float AssistedBaseForwardMagnitude()
+    float AssistedLocalForwardMagnitude(Vector3 localVelocity)
     {
         // This function was determined through extensive playtesting for best feel, please see: https://www.desmos.com/calculator/m07laliezy)
-        return (baseThrowVelocity.z / 6.0f) + 6.5f;
+        return (localVelocity.z / 6.0f) + 6.5f;
     }
 
-    private float AdjustBaseHorizontalVelocity(float assistedForwardVelocity)
+    float AdjustLocalHorizontalVelocity(Vector3 localVelocity, float assistedForwardVelocity)
     {
         // If throw is not within horizontal threshold of target object, then adjust accordingly to make throw more accurate.
-        if (baseThrowVelocity.x > HorizontalAssistThreshold || baseThrowVelocity.x < -1 * HorizontalAssistThreshold)
+        if (localVelocity.x > HorizontalAssistThreshold || localVelocity.x < -1 * HorizontalAssistThreshold)
         {
-            return (baseThrowVelocity.x * assistedForwardVelocity) / baseThrowVelocity.z;
+            return (localVelocity.x * assistedForwardVelocity) / localVelocity.z;
         }
         else
         {
-            return baseThrowVelocity.x;
+            return localVelocity.x;
         }
 
     }

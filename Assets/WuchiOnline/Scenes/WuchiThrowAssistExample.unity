@@ -571,7 +571,7 @@ GameObject:
   - component: {fileID: 529186437}
   - component: {fileID: 529186436}
   m_Layer: 0
-  m_Name: WuchiXRGrabInteractableCube
+  m_Name: StandardXRInteractableCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
