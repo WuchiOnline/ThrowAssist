@@ -13,33 +13,41 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     // 3. Put together Github readme.
 
     // Magic Numbers: all constants were determined by extensive playtesting for best feel.
-    // These can be adjusted and abstracted for different types of archs and target distances.
+    // These can be adjusted and abstracted to achieve different throwing trajectories.
 
-    const float MinUpwardThrowModifier = 15.0f;
-    const float MaxUpwardThrowModifier = 1.54f;
-    const float MinForwardThrowModifier = 13.0f;
-    const float MaxForwardThrowModifier = 1.36f;
-    const float MinBaseAssistRange = 0.5f;
-    const float MaxBaseAssistRange = 5.5f;
-    const int OptimalPolledVelocityCount = 3; // Three is the sweet spot, although four and five produce decent results as well.
-    const float AverageReleaseHeight = 2.5f;
+    // The optimal amount of velocities to poll and utilize when assisting velocity transformations.
+    const int OptimalPolledVelocityCount = 4;
+    // The minimum amount of strength a throw must have in both forward and upward velocities to be eligable for the assist algorithm.
     const float ThrowStrengthAssistThreshold = 0.45f;
+    // The maximum amount of horizontal inaccuracy a throw must not exceed to be eligable for the assist algorithm.
+    const float NormalizedHorizontalInaccuracyThreshold = 0.2f;
+    // The minimum local velocity threshold a throw's magnitude must exceed to be eligable for the assist algorithm.
+    const float MinLocalAssistThreshold = 0.5f;
+    // The maximum local velocity threshold a throw's magnitude must not exceed to be eligable for the assist algorithm.
+    const float MaxLocalAssistThreshold = 5.5f;
+    // The minimum amount of horizontal accuracy (relative to target object) an assisted throw must have before scaling forward velocity to be proportionate to an assisted horizontal velocity.
     const float HorizontalAssistThreshold = 0.75f;
-    const float NormalizedHorizontalAccuracyTolerance = 0.2f;
+    // The upward velocity modifier applied when a throw is below the minimum local velocity assist threshold.
+    const float MinUpwardThrowModifier = 15.0f;
+    // The upward velocity modifier applied when a throw is above the maximum local velocity assist threshold.
+    const float MaxUpwardThrowModifier = 1.54f;
+    // The forward velocity modifier applied when a throw is below the minimum local velocity assist threshold.
+    const float MinForwardThrowModifier = 13.0f;
+    // The forward velocity modifier applied when a throw is above the maximum local velocity assist threshold.
+    const float MaxForwardThrowModifier = 1.36f;
+    // The average release height of a throw, which affects the release height modifier calculations.
+    const float AverageReleaseHeight = 2.5f;
 
-    public Transform rigToTarget; // a transform of a gameobject childed to the rig to provide a reference point to localize velocities.
+
+    // Target to assist the user in throwing the object towards.
     public Transform target;
+    // Transform of an empty GameObject childed to XR Rig, which can be rotated to face the target on only the Y-axis. Used for local transformations.
+    public Transform rigToTarget;
+    // Modifier for velocity magnitudes that are unassisted.
+    public float unassistedThrowVelocityModifier = 2.0f;
 
-    //
     Transform currentInteractorAttach;
-
-    //
-    public float unassistedThrowVelocityModifier;
-
-    //
     bool isInteractorVelocityPollingActive;
-
-    //
     Queue<Vector3> polledVelocities;
 
     void Start()
@@ -53,20 +61,14 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
         if (!interactor)
             return;
         base.OnSelectEnter(interactor);
-
         isInteractorVelocityPollingActive = true;
-        Debug.Log("Grabbed.");
-
     }
 
     protected override void OnSelectExit(XRBaseInteractor interactor)
     {
         currentInteractorAttach = interactor.attachTransform;
         base.OnSelectExit(interactor);
-
         isInteractorVelocityPollingActive = false;
-        Debug.Log("Ungrabbed.");
-
     }
 
     void Update()
@@ -98,7 +100,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
             // Evaluate if throw is strong and accurate enough to warrant applying the throw assist algorithm.
             if (m_DetachVelocity.y < ThrowStrengthAssistThreshold || // Throw does not meet the minimum vertical throw strength to trigger assisted throw.
                 rigToTarget.InverseTransformVector(m_DetachVelocity).z < ThrowStrengthAssistThreshold || // Throw does not meet the minimum forward throw strength to trigger assisted throw. 
-                Mathf.Abs(rigToTarget.InverseTransformVector(m_DetachVelocity).normalized.x) > NormalizedHorizontalAccuracyTolerance || // Throw is not within horizontal accuracy tolerance to warrant assisting velocity.
+                Mathf.Abs(rigToTarget.InverseTransformVector(m_DetachVelocity).normalized.x) > NormalizedHorizontalInaccuracyThreshold || // Throw is not within horizontal accuracy tolerance to warrant assisting velocity.
                 polledVelocities.Count < 1) // Object's velocity was not polled for at least a single frame.
             {
                 m_RigidBody.velocity = m_DetachVelocity;
@@ -184,11 +186,11 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
         {
             return localVelocity.y * unassistedThrowVelocityModifier;
         }
-        else if (localVelocity.y < MinBaseAssistRange)
+        else if (localVelocity.y < MinLocalAssistThreshold)
         {
             return localVelocity.y * MinUpwardThrowModifier;
         }
-        else if (localVelocity.y < MaxBaseAssistRange)
+        else if (localVelocity.y < MaxLocalAssistThreshold)
         {
             return AssistedLocalUpwardMagnitude(localVelocity);
         }
@@ -210,11 +212,11 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
         {
             return localVelocity.z * unassistedThrowVelocityModifier;
         }
-        else if (localVelocity.z < MinBaseAssistRange)
+        else if (localVelocity.z < MinLocalAssistThreshold)
         {
             return localVelocity.z * MinForwardThrowModifier;
         }
-        else if (localVelocity.z < MaxBaseAssistRange)
+        else if (localVelocity.z < MaxLocalAssistThreshold)
         {
             return AssistedLocalForwardMagnitude(localVelocity);
         }
