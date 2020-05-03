@@ -25,7 +25,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     const float MinLocalAssistThreshold = 0.5f;
     // The maximum local velocity threshold a throw's magnitude must not exceed to be assisted.
     const float MaxLocalAssistThreshold = 5.5f;
-    // The minimum amount of horizontal accuracy (relative to target object) a throw must have to adjust proportionately to an assisted forward velocity.
+    // The minimum amount of horizontal inaccuracy (relative to target object) a throw must have to warrant proportionately adjusting with assisted forward velocity.
     const float HorizontalAdjustThreshold = 0.75f;
 
     // The upward velocity modifier applied when a throw is below the minimum local velocity assist threshold.
@@ -146,30 +146,11 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
         return finalAssistedThrowVelocity;
     }
 
-    Vector3 ApplyReleaseHeightModifier(Vector3 assistedVelocity)
-    {
-        float releaseHeightThrowModifier;
-        if (currentInteractorAttach.position.y > AverageReleaseHeight) // Above-Average Release Height 
-        {
-            releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - currentInteractorAttach.position.y) * AboveAverageReleaseHeightModifier);
-        }
-        else // Below-Average Release Height
-        {
-            releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - currentInteractorAttach.position.y) * BelowAverageReleaseHeightModifier);
-        }
-
-        return assistedVelocity * releaseHeightThrowModifier;
-    }
-
     Vector3 DetermineHighestUpwardVelocityFromPolledList()
     {
-
         Vector3 highestUpwardVelocity = polledVelocities.OrderBy(velocity => velocity.y).Last();
 
-        Debug.Log("Highest Upward Velocity From Polled List is: " + highestUpwardVelocity);
-
         return highestUpwardVelocity;
-
     }
 
     float AssistLocalUpwardVelocity(Vector3 localVelocity)
@@ -194,7 +175,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
     float AssistedLocalUpwardMagnitude(Vector3 localVelocity)
     {
-        // This function was determined through extensive playtesting for best feel, please see: https://www.desmos.com/calculator/clrzceq5ch
+        // This function was determined through extensive playtesting for best feel
         return (localVelocity.y / 6.0f) + 7.5f;
     }
 
@@ -226,7 +207,6 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
 
     float AdjustLocalHorizontalVelocity(Vector3 localVelocity, float assistedForwardVelocity)
     {
-        // If throw is not within horizontal threshold of target object, then adjust accordingly to make throw more accurate.
         if (localVelocity.x > HorizontalAdjustThreshold || localVelocity.x < -1 * HorizontalAdjustThreshold)
         {
             return (localVelocity.x * assistedForwardVelocity) / localVelocity.z;
@@ -236,6 +216,21 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
             return localVelocity.x;
         }
 
+    }
+
+    Vector3 ApplyReleaseHeightModifier(Vector3 assistedVelocity)
+    {
+        float releaseHeightThrowModifier;
+        if (currentInteractorAttach.position.y > AverageReleaseHeight) // Above-Average Release Height 
+        {
+            releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - currentInteractorAttach.position.y) * AboveAverageReleaseHeightModifier);
+        }
+        else // Below-Average Release Height
+        {
+            releaseHeightThrowModifier = 1.0f + ((AverageReleaseHeight - currentInteractorAttach.position.y) * BelowAverageReleaseHeightModifier);
+        }
+
+        return assistedVelocity * releaseHeightThrowModifier;
     }
 
 }
