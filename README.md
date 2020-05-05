@@ -40,7 +40,7 @@ Oculus XR Plugin and Unity XR Interaction Toolkit are pre-imported into the proj
 
 1. Clone or download the repo: ```git clone https://github.com/WuchiOnline/Wuchi-ThrowAlgo```
 2. Open your Unity Hub.
-3. Press Add and select the repo folder.
+3. Press Add and select the repo's folder location.
 4. Open up the example scene, which is located in the WuchiOnline/Scenes folder.
 5. This project natively supports all PC-compatible Oculus headsets. To use other PC-compatible headsets with this demo:
 
