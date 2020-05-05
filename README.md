@@ -28,7 +28,7 @@ Originally built and implemented as the core interaction for [Hooplord](https://
 
 ## Built With
 
-This project showcases a basic implementation using primitives, which utilizes:
+The example project showcases a basic implementation using primitives, which utilizes:
 
 * Unity 2019.3.2f1
 * Oculus XR Plugin 1.3.3
