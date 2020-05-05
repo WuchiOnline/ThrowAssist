@@ -10,19 +10,19 @@ Originally built and implemented as the core interaction for [Hooplord](https://
 
 - Designed to be fun-to-learn, yet hard-to-master.
 
+	- Significantly lowers required accuracy by redirecting throws within a proximity threshold of the target.
+	
+	- Maintains high accuracy ceiling that rewards precision and consistency.
+
 - Notably decreased user fatigue and frustration when compared to standard throwing implementations.
-
-- Multi-factor detection system that guesses if a throw is intended towards the target before applying velocity transformations.
-
-- Significantly lowers required accuracy by redirecting throws within a proximity threshold of the target.
-
-- Maintains high accuracy ceiling that rewards precision and consistency.
 
 - Adjusts for players of all heights and wingspans with a modifier based on release height.
 
-- Can be further abstracted and configured for different desired results.
+- Multi-factor detection system that guesses if a throw is intended towards the target before applying velocity transformations.
 
 - Refactored to extend the Unity XR Interaction Toolkit, but can be easily adapted for other interaction frameworks.
+
+	- Can be further abstracted and configured for different desired results.
 
 # Example Project
 
