@@ -4,9 +4,9 @@ A smoothing algorithm that assists the accuracy and trajectory of an interactabl
 
 Originally built and implemented as the core interaction for [Hooplord](https://www.wuchi.online/hooplord), a virtual reality experience centered around basketball shooting mechanics.
 
-[![Demo Video](https://files.cargocollective.com/c444505/HooplordThrow2Compressed.gif)](https://twitter.com/WuchiOnline/status/1248385466593718277)
+![Hooplord Demo](https://files.cargocollective.com/c444505/HooplordThrow2Compressed.gif)(https://twitter.com/WuchiOnline/status/1248385466593718277)
 
-## Main Features
+## Features
 
 - Designed as a fun-to-learn, hard-to-master interaction with decreased user fatigue and frustration when compared to standard throwing implementations.
 
