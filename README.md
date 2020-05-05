@@ -10,9 +10,9 @@ Originally built and implemented as the core interaction for [Hooplord](https://
 
 - Designed as a fun-to-learn, hard-to-master interaction with decreased user fatigue and frustration when compared to standard throwing implementations.
 
-- Multi-factor detection system that guesses if a throw is intended towards a target object before applying smoothing algorithm.
+- Multi-factor detection system that guesses if a throw is intended towards the target object before applying smoothing algorithm.
 
-- Significantly lowers required accuracy by recalculating throw velocities within a proximity threshold of the target.
+- Significantly lowers required accuracy by recalculating throw velocities within a proximity threshold of the target object.
 
 - Maintains high accuracy ceiling that rewards precision and consistency.
 
@@ -22,11 +22,11 @@ Originally built and implemented as the core interaction for [Hooplord](https://
 
 - This version has been refactored to extend the Unity XR Interaction Toolkit, but can easily be adapted for other interaction frameworks.
 
-# Example Implementation
+# Example Project
 
 ## Built With
 
-This project showcases an example implementation which utilizes:
+This project showcases a basic implementation using primitives, which utilizes:
 
 * Unity 2019.3.2f1
 * Oculus XR Plugin 1.3.3
@@ -34,18 +34,18 @@ This project showcases an example implementation which utilizes:
 
 Oculus XR Plugin and Unity XR Interaction Toolkit are pre-imported into the project.
 
-## How can I open this example project?
+## How do I explore the example project?
 
 1. Clone or download the repo: ```git clone https://github.com/WuchiOnline/Wuchi-ThrowAlgo```
 2. Open your Unity Hub.
-3. Press Add and select the repo.
-4. Open up the example scene, located in the WuchiOnline/Scenes folder.
-5. Project natively supports Oculus headsets. If you are using another headset:
+3. Press Add and select the project folder.
+4. Open up the example scene, which is located in the WuchiOnline/Scenes folder.
+5. The example project natively supports all PC-compatible Oculus headsets. To use any other PC-compatible headset with this project:
 - Open the Package Manager
-- Install the XR Management package
-- Open your Project Settings
-- Under XR Plugin Management, install the appropriate XR Plugin and Loader.
-6. Press Play!
+- Install the Unity XR Management package
+- Open the Project Settings
+- Under the XR Plugin Management section, install the appropriate XR Plugin and Loader.
+6. Press Play.
 
 # Author
 
