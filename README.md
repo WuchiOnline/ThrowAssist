@@ -1,6 +1,7 @@
 # Wuchi's Throwing Algorithm
 
 A smoothing algorithm that assists the accuracy and trajectory of an interactable object when thrown at a given target.
+
 Originally built and implemented as the core interaction for [Hooplord](https://www.wuchi.online/hooplord), a virtual reality experience centered around basketball shooting mechanics.
 
 [![Demo Video](https://files.cargocollective.com/c444505/HooplordThrow2Compressed.gif)](https://twitter.com/WuchiOnline/status/1248385466593718277)
@@ -8,11 +9,17 @@ Originally built and implemented as the core interaction for [Hooplord](https://
 ## Main Features
 
 - Designed as a fun-to-learn, hard-to-master interaction with decreased user fatigue and frustration when compared to standard throwing implementations.
+
 - Multi-factor detection system that guesses if a throw is intended towards a target object before applying smoothing algorithm.
+
 - Significantly lowers required accuracy by recalculating throw velocities within a proximity threshold of the target.
+
 - Maintains high accuracy ceiling that rewards precision and consistency.
+
 - Adjusts for players of all heights and wingspans with a modifier based on release height.
+
 - Can be further abstracted and configured for different desired results.
+
 - This version has been refactored to extend the Unity XR Interaction Toolkit, but can easily be adapted for other interaction frameworks.
 
 # Example Implementation
@@ -42,7 +49,7 @@ Oculus XR Plugin and Unity XR Interaction Toolkit are pre-imported into the proj
 
 # Author
 
-* **Eric Wu** - *[@WuchiOnline]* - [Twitter](https://twitter.com/WuchiOnline) - [GitHub](https://github.com/WuchiOnline) - [LinkedIn](https://www.linkedin.com/in/ericwu90/)
+**Eric Wu** [@WuchiOnline] - [Twitter](https://twitter.com/WuchiOnline) - [GitHub](https://github.com/WuchiOnline) - [LinkedIn](https://www.linkedin.com/in/ericwu90/)
 
 # License
 
