@@ -8,7 +8,9 @@ Originally built and implemented as the core interaction for [Hooplord](https://
 
 ## Features
 
-- Designed as a fun-to-learn, hard-to-master interaction with decreased user fatigue and frustration when compared to standard throwing implementations.
+- Designed to be fun-to-learn, yet hard-to-master.
+
+- Notably decreased user fatigue and frustration when compared to standard throwing implementations.
 
 - Multi-factor detection system that guesses if a throw is intended towards the target object before applying smoothing algorithm.
 
