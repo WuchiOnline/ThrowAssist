@@ -6,7 +6,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 /// <summary>
 /// A smoothing algorithm that assists the accuracy and trajectory of an interactable object when thrown at a given target.
-/// Originally built and implemented as Hooplord's throwing interaction, I've refactored it so that it extends Unity's XR Interaction Toolkit.
+/// Originally built and implemented as the core interaction for Hooplord, a PC VR game centered around basketball shooting mechanics.
 /// </summary>
 
 public class Wuchi_ThrowAssist : XRGrabInteractable
