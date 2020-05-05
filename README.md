@@ -43,10 +43,10 @@ Oculus XR Plugin and Unity XR Interaction Toolkit are pre-imported into the proj
 3. Press Add and select the repo folder.
 4. Open up the example scene, which is located in the WuchiOnline/Scenes folder.
 5. The example project natively supports all PC-compatible Oculus headsets. To use another PC-compatible headset with this project:
-- Open the Package Manager
-- Install the Unity XR Management package
-- Open the Project Settings
-- Under the XR Plugin Management section, install the appropriate XR Plugin and Loader.
+	- Open the Package Manager
+	- Install the Unity XR Management package
+	- Open the Project Settings
+	- Under the XR Plugin Management section, install the appropriate XR Plugin and Loader.
 6. Press Play.
 
 # Author
