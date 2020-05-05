@@ -22,7 +22,7 @@ Originally built and implemented as the core interaction for [Hooplord](https://
 
 - Can be further abstracted and configured for different desired results.
 
-- This version has been refactored to extend the Unity XR Interaction Toolkit, but can be easily adapted for other interaction frameworks.
+- Refactored to extend the Unity XR Interaction Toolkit, but can be easily adapted for other interaction frameworks.
 
 # Example Project
 
