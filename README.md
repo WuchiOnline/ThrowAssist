@@ -22,13 +22,13 @@ Originally built and implemented as the core interaction for [Hooplord](https://
 
 - Refactored to extend the Unity XR Interaction Toolkit, but can be easily adapted for other interaction frameworks.
 
-	- Can be further abstracted and configured for different desired results.
+	- Can be further abstracted and configured for a wide range of desired results.
 
 # Example Project
 
 ## Built With
 
-The example project showcases a basic implementation using primitives, which utilizes:
+The example project showcases a barebones implementation using primitives, which utilizes:
 
 * Unity 2019.3.2f1
 * Oculus XR Plugin 1.3.3
