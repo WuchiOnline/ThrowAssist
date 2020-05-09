@@ -49,7 +49,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable // XR Interaction Toolkit us
     // Optional strength modifier for unassisted throws.
     public float m_UnassistedThrowVelocityModifier = 1.0f;
 
-    // Retains Interactor's Attach Transform reference for Detach() in LateUpdate.
+    // Retains Interactor's Attach Transform reference for Detach() in LateUpdate().
     Transform m_CurrentInteractorAttach;
 
     // Store interactor velocities while selecting object to utilize in smoothing algorithm.
