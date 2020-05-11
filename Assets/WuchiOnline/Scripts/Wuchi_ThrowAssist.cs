@@ -11,7 +11,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 public class Wuchi_ThrowAssist : XRGrabInteractable // XR Interaction Toolkit uses Hungarian notation, which has been matched here for consistency.
 {
-    // All default member values were determined by extensive playtesting for best feel.
+    // All member field default values were determined by extensive playtesting for best feel.
     // These can be experimented with and fine-tuned to achieve a wide variety of smoothing effects.
 
     // If you discover a new smoothing effect and want to save the values as presets that initialize on Start():
