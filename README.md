@@ -1,4 +1,4 @@
-# Wuchi's Throwing Assist
+# Wuchi's Throw Assist
 
 A smoothing algorithm that assists the accuracy and trajectory of an interactable object when thrown at a given target.
 
@@ -57,4 +57,4 @@ Oculus XR Plugin and Unity XR Interaction Toolkit are pre-imported into the proj
 
 # License
 
-Wuchi's Throwing Assist is licensed under the MIT License.
+Wuchi's Throw Assist is licensed under the MIT License.
