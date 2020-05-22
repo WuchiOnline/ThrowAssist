@@ -1,4 +1,4 @@
-# Wuchi's Throwing Algorithm
+# Wuchi's Throwing Assist
 
 A smoothing algorithm that assists the accuracy and trajectory of an interactable object when thrown at a given target.
 
@@ -38,7 +38,7 @@ Oculus XR Plugin and Unity XR Interaction Toolkit are pre-imported into the proj
 
 ## How do I open the example project?
 
-1. Clone or download the repo: ```git clone https://github.com/WuchiOnline/Wuchi-ThrowAlgo```
+1. Clone or download the repo: ```git clone https://github.com/WuchiOnline/Wuchi-ThrowAssist```
 2. Open your Unity Hub.
 3. Press Add and select the repo's folder location.
 4. Open up the example scene, which is located in the WuchiOnline/Scenes folder.
@@ -57,4 +57,4 @@ Oculus XR Plugin and Unity XR Interaction Toolkit are pre-imported into the proj
 
 # License
 
-Wuchi's Throwing Algorithm is licensed under the MIT License.
+Wuchi's Throwing Assist is licensed under the MIT License.
