@@ -38,7 +38,7 @@ Oculus XR Plugin and Unity XR Interaction Toolkit are pre-imported into the proj
 
 ## How do I open the example project?
 
-1. Clone or download the repo: ```git clone https://github.com/WuchiOnline/Wuchi-ThrowAssist```
+1. Clone or download the repo: ```git clone https://github.com/WuchiOnline/ThrowAssist```
 2. Open your Unity Hub.
 3. Press Add and select the repo's folder location.
 4. Open up the example scene, which is located in the WuchiOnline/Scenes folder.
