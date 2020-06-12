@@ -97,6 +97,7 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
         {
             return;
         }
+        
         base.OnSelectEnter(interactor);
         m_ShouldPollVelocity = true;
     }
