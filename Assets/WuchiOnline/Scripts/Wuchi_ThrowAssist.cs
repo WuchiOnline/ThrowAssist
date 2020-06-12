@@ -94,7 +94,9 @@ public class Wuchi_ThrowAssist : XRGrabInteractable
     protected override void OnSelectEnter(XRBaseInteractor interactor)
     {
         if (!interactor)
+        {
             return;
+        }
         base.OnSelectEnter(interactor);
         m_ShouldPollVelocity = true;
     }
