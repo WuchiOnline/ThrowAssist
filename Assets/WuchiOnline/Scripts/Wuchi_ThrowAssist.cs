@@ -9,7 +9,8 @@ using UnityEngine.XR.Interaction.Toolkit;
 /// Originally built and implemented as the core interaction for Hooplord, a PC VR game centered around basketball shooting mechanics.
 /// </summary>
 
-public class Wuchi_ThrowAssist : XRGrabInteractable // XR Interaction Toolkit uses Hungarian notation, which has been matched here for consistency.
+// Unity's XR Interaction Toolkit uses Hungarian notation, which has been matched here for consistency.
+public class Wuchi_ThrowAssist : XRGrabInteractable
 {
     // All member field default values were determined by extensive playtesting for best feel.
     // These can be experimented with and fine-tuned to achieve a wide variety of smoothing effects.
