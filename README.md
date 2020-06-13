@@ -1,8 +1,10 @@
 # Wuchi's Throw Assist
 
-A smoothing algorithm that assists the accuracy and trajectory of an interactable object when thrown at a given target. Click here to dive straight into the code: [Assets/WuchiOnline/Scripts/Wuchi_ThrowAssist.cs](https://github.com/WuchiOnline/ThrowAssist/blob/master/Assets/WuchiOnline/Scripts/Wuchi_ThrowAssist.cs)
+A smoothing algorithm that assists the accuracy and trajectory of an interactable object when thrown at a given target.
 
 Originally built and implemented as the core interaction for [Hooplord](https://wuchi.online/hooplord), a virtual reality experience centered around basketball shooting mechanics.
+
+To dive straight into the code, please see: [Assets/WuchiOnline/Scripts/Wuchi_ThrowAssist.cs](https://github.com/WuchiOnline/ThrowAssist/blob/master/Assets/WuchiOnline/Scripts/Wuchi_ThrowAssist.cs)
 
 ![Hooplord Demo](GIF/HooplordThrow.gif)
 
